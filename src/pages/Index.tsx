@@ -5,6 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Header from '@/components/Header';
 import Chatbot from '@/components/Chatbot';
+import heroRestaurant from '@/assets/hero-restaurant.jpg';
+import northIndianFood from '@/assets/north-indian-food.jpg';
+import southIndianFood from '@/assets/south-indian-food.jpg';
 
 const Index = () => {
   const features = [
@@ -18,15 +21,22 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      {/* Hero Section */}
-      <section className="relative pt-20 md:pt-24 pb-16 overflow-hidden">
-        <div className="absolute inset-0 gradient-burgundy opacity-5" />
-        <div className="container mx-auto px-4 py-16 md:py-24">
+      {/* Hero Section with Image */}
+      <section className="relative pt-16 md:pt-20 overflow-hidden">
+        <div className="absolute inset-0">
+          <img 
+            src={heroRestaurant} 
+            alt="Hotel Heaven Restaurant" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/60" />
+        </div>
+        <div className="container mx-auto px-4 py-20 md:py-32 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto"
+            className="max-w-2xl"
           >
             <h1 className="font-display text-4xl md:text-6xl font-bold text-foreground mb-6">
               Welcome to{' '}
@@ -35,13 +45,13 @@ const Index = () => {
             <p className="text-lg md:text-xl text-muted-foreground mb-8">
               Experience the finest North & South Indian cuisine. Order online or chat with our AI assistant for personalized recommendations.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/menu">
                 <Button size="lg" className="gradient-burgundy text-lg px-8">
                   View Menu <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="text-lg px-8">
+              <Button size="lg" variant="outline" className="text-lg px-8 bg-background/50 backdrop-blur-sm">
                 Call: +91 98765 43210
               </Button>
             </div>
@@ -76,7 +86,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Cuisine Preview */}
+      {/* Cuisine Preview with Images */}
       <section className="py-16">
         <div className="container mx-auto px-4">
           <h2 className="font-display text-3xl md:text-4xl font-bold text-center mb-12">
@@ -84,8 +94,8 @@ const Index = () => {
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             {[
-              { name: 'North Indian', desc: 'Rich curries, tandoori delights, fluffy naans & aromatic biryanis', emoji: '🍛' },
-              { name: 'South Indian', desc: 'Crispy dosas, fluffy idlis, spicy curries & authentic filter coffee', emoji: '🥘' },
+              { name: 'North Indian', desc: 'Rich curries, tandoori delights, fluffy naans & aromatic biryanis', image: northIndianFood },
+              { name: 'South Indian', desc: 'Crispy dosas, fluffy idlis, spicy curries & authentic filter coffee', image: southIndianFood },
             ].map((cuisine, i) => (
               <motion.div
                 key={cuisine.name}
@@ -94,22 +104,70 @@ const Index = () => {
                 viewport={{ once: true }}
               >
                 <Card className="overflow-hidden group cursor-pointer hover:shadow-xl transition-all">
-                  <CardContent className="p-8 flex items-center gap-6">
-                    <div className="text-6xl">{cuisine.emoji}</div>
-                    <div>
-                      <h3 className="font-display text-2xl font-bold text-foreground mb-2">{cuisine.name}</h3>
-                      <p className="text-muted-foreground mb-4">{cuisine.desc}</p>
-                      <Link to="/menu">
-                        <Button variant="outline" className="group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                          Explore Menu <ArrowRight className="ml-2 w-4 h-4" />
-                        </Button>
-                      </Link>
+                  <div className="relative h-48 md:h-64 overflow-hidden">
+                    <img 
+                      src={cuisine.image} 
+                      alt={cuisine.name} 
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <h3 className="font-display text-2xl font-bold text-foreground mb-1">{cuisine.name}</h3>
+                      <p className="text-sm text-muted-foreground">{cuisine.desc}</p>
                     </div>
+                  </div>
+                  <CardContent className="p-4">
+                    <Link to="/menu">
+                      <Button className="w-full gradient-burgundy group-hover:opacity-90 transition-opacity">
+                        Explore Menu <ArrowRight className="ml-2 w-4 h-4" />
+                      </Button>
+                    </Link>
                   </CardContent>
                 </Card>
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Gallery Section */}
+      <section className="py-16 bg-card">
+        <div className="container mx-auto px-4">
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-center mb-4">
+            Experience <span className="text-gradient-gold">Luxury Dining</span>
+          </h2>
+          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
+            Step into our elegantly designed restaurant where traditional Indian hospitality meets modern comfort
+          </p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="relative rounded-2xl overflow-hidden shadow-2xl"
+          >
+            <img 
+              src={heroRestaurant} 
+              alt="Hotel Heaven Interior" 
+              className="w-full h-64 md:h-96 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
+            <div className="absolute bottom-6 left-6 right-6">
+              <div className="flex flex-wrap gap-4">
+                <div className="bg-background/90 backdrop-blur-sm rounded-lg px-4 py-2">
+                  <span className="text-primary font-display font-bold">30-45 min</span>
+                  <p className="text-xs text-muted-foreground">Delivery Time</p>
+                </div>
+                <div className="bg-background/90 backdrop-blur-sm rounded-lg px-4 py-2">
+                  <span className="text-primary font-display font-bold">Free</span>
+                  <p className="text-xs text-muted-foreground">Delivery over ₹300</p>
+                </div>
+                <div className="bg-background/90 backdrop-blur-sm rounded-lg px-4 py-2">
+                  <span className="text-primary font-display font-bold">4.8★</span>
+                  <p className="text-xs text-muted-foreground">Customer Rating</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 

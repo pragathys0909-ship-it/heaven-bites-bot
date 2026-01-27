@@ -40,11 +40,13 @@ const MenuPage = () => {
 
           {/* Category Tabs */}
           <Tabs value={activeCategory} onValueChange={setActiveCategory} className="mb-8">
-            <TabsList className="flex w-full max-w-lg mx-auto">
-              <TabsTrigger value="breakfast" className="flex-1">Breakfast</TabsTrigger>
-              <TabsTrigger value="lunch" className="flex-1">Lunch</TabsTrigger>
-              <TabsTrigger value="dinner" className="flex-1">Dinner</TabsTrigger>
-              <TabsTrigger value="snacks" className="flex-1">Snacks</TabsTrigger>
+            <TabsList className="flex w-full max-w-2xl mx-auto overflow-x-auto">
+              <TabsTrigger value="breakfast" className="flex-1 min-w-[80px]">Breakfast</TabsTrigger>
+              <TabsTrigger value="lunch" className="flex-1 min-w-[80px]">Lunch</TabsTrigger>
+              <TabsTrigger value="dinner" className="flex-1 min-w-[80px]">Dinner</TabsTrigger>
+              <TabsTrigger value="snacks" className="flex-1 min-w-[80px]">Snacks</TabsTrigger>
+              <TabsTrigger value="beverages" className="flex-1 min-w-[80px]">Beverages</TabsTrigger>
+              <TabsTrigger value="desserts" className="flex-1 min-w-[80px]">Desserts</TabsTrigger>
             </TabsList>
           </Tabs>
 

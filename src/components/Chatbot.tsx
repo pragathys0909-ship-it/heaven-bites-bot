@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Send, Mic, MicOff, Volume2, VolumeX, Loader2 } from 'lucide-react';
+import { X, Send, Mic, MicOff, Volume2, VolumeX, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/card';
 import { allMenus, MenuItem } from '@/data/menuData';
 import { useCart } from '@/context/CartContext';
 import { toast } from 'sonner';
+import chefAvatar from '@/assets/chef-avatar.png';
 
 interface Message {
   id: string;
@@ -357,16 +358,25 @@ const Chatbot = () => {
 
   return (
     <>
-      {/* Chat Toggle Button */}
+      {/* Chat Toggle Button - Chef Avatar */}
       <motion.button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full gradient-gold shadow-lg flex items-center justify-center ${isOpen ? 'hidden' : ''}`}
+        className={`fixed bottom-6 right-6 z-50 ${isOpen ? 'hidden' : ''}`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        animate={{ boxShadow: ['0 0 20px hsl(38 70% 50% / 0.3)', '0 0 40px hsl(38 70% 50% / 0.6)', '0 0 20px hsl(38 70% 50% / 0.3)'] }}
-        transition={{ duration: 2, repeat: Infinity }}
       >
-        <MessageCircle className="w-6 h-6 text-secondary-foreground" />
+        <div className="relative">
+          {/* White circular border with soft shadow */}
+          <div className="w-16 h-16 rounded-full bg-white p-1 shadow-xl ring-2 ring-primary/20">
+            <img 
+              src={chefAvatar} 
+              alt="Chef Bot" 
+              className="w-full h-full rounded-full object-cover"
+            />
+          </div>
+          {/* Online indicator */}
+          <span className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full animate-pulse" />
+        </div>
       </motion.button>
 
       {/* Chat Window */}
@@ -382,12 +392,21 @@ const Chatbot = () => {
               {/* Header */}
               <div className="gradient-burgundy p-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-                    <span className="text-xl">🍽️</span>
+                  <div className="relative">
+                    <div className="w-12 h-12 rounded-full bg-white p-0.5 ring-2 ring-primary-foreground/30">
+                      <img 
+                        src={chefAvatar} 
+                        alt="Chef Bot" 
+                        className="w-full h-full rounded-full object-cover"
+                      />
+                    </div>
+                    <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
                   </div>
                   <div>
-                    <h3 className="font-display font-semibold text-primary-foreground">Food Assistant</h3>
-                    <p className="text-xs text-primary-foreground/80">Hotel Heaven</p>
+                    <h3 className="font-display font-semibold text-primary-foreground">Chef Bot</h3>
+                    <p className="text-xs text-primary-foreground/80 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 bg-green-400 rounded-full" /> Online
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">

@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Minus, Plus, Trash2, ArrowLeft, ShoppingBag, CreditCard, Wallet, Banknote, Clock, CheckCircle2, Package } from 'lucide-react';
+import { Minus, Plus, Trash2, ArrowLeft, ShoppingBag, Clock, CheckCircle2, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import Header from '@/components/Header';
 import Chatbot from '@/components/Chatbot';
+import PaymentMethodSelector from '@/components/PaymentMethodSelector';
 import { useCart, CartItem } from '@/context/CartContext';
+import { useOrders } from '@/context/OrderContext';
 import { toast } from 'sonner';
 
 interface OrderDetails {
@@ -20,16 +20,21 @@ interface OrderDetails {
   orderId: string;
 }
 
+const getPaymentMethodName = (id: string): string => {
+  const names: Record<string, string> = {
+    upi: 'UPI Payment',
+    card: 'Credit / Debit Card',
+    wallet: 'Mobile Wallet',
+    cod: 'Cash on Delivery',
+  };
+  return names[id] || 'UPI Payment';
+};
+
 const CartPage = () => {
   const { items, updateQuantity, removeItem, clearCart, totalAmount } = useCart();
+  const { addOrder } = useOrders();
   const [paymentMethod, setPaymentMethod] = useState('upi');
   const [orderPlaced, setOrderPlaced] = useState<OrderDetails | null>(null);
-
-  const paymentMethods = [
-    { id: 'upi', name: 'UPI / Google Pay / PhonePe', icon: Wallet, desc: 'Pay instantly via UPI' },
-    { id: 'card', name: 'Credit / Debit Card', icon: CreditCard, desc: 'Visa, Mastercard, RuPay' },
-    { id: 'cod', name: 'Cash on Delivery', icon: Banknote, desc: 'Pay when you receive' },
-  ];
 
   const getEstimatedDelivery = () => {
     const now = new Date();
@@ -38,17 +43,26 @@ const CartPage = () => {
     return `${minTime.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })} - ${maxTime.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}`;
   };
 
-  const generateOrderId = () => {
-    return `HH${Date.now().toString(36).toUpperCase()}`;
-  };
-
   const handleCheckout = () => {
+    const finalAmount = totalAmount < 300 ? totalAmount + 30 : totalAmount;
+    const estimatedDelivery = getEstimatedDelivery();
+    const paymentMethodName = getPaymentMethodName(paymentMethod);
+    
+    // Save to order history
+    const newOrder = addOrder({
+      items: [...items],
+      amount: finalAmount,
+      status: 'success',
+      paymentMethod: paymentMethodName,
+      estimatedDelivery,
+    });
+    
     const order: OrderDetails = {
       items: [...items],
-      total: totalAmount,
-      paymentMethod: paymentMethods.find(p => p.id === paymentMethod)?.name || 'UPI',
-      estimatedDelivery: getEstimatedDelivery(),
-      orderId: generateOrderId(),
+      total: finalAmount,
+      paymentMethod: paymentMethodName,
+      estimatedDelivery,
+      orderId: newOrder.id,
     };
     
     setOrderPlaced(order);
@@ -247,30 +261,8 @@ const CartPage = () => {
                 {/* Payment Methods */}
                 <Card className="mt-6">
                   <CardContent className="p-6">
-                    <h2 className="font-display text-lg font-bold mb-4 flex items-center gap-2">
-                      <CreditCard className="w-5 h-5 text-primary" />
-                      Payment Method
-                    </h2>
-                    <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
-                      {paymentMethods.map((method) => (
-                        <div
-                          key={method.id}
-                          className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-all cursor-pointer ${
-                            paymentMethod === method.id 
-                              ? 'border-primary bg-primary/5' 
-                              : 'border-border hover:border-primary/50'
-                          }`}
-                          onClick={() => setPaymentMethod(method.id)}
-                        >
-                          <RadioGroupItem value={method.id} id={method.id} />
-                          <method.icon className="w-5 h-5 text-primary" />
-                          <Label htmlFor={method.id} className="flex-1 cursor-pointer">
-                            <span className="font-medium">{method.name}</span>
-                            <p className="text-sm text-muted-foreground">{method.desc}</p>
-                          </Label>
-                        </div>
-                      ))}
-                    </RadioGroup>
+                    <h2 className="font-display text-lg font-bold mb-4">Select Payment Method</h2>
+                    <PaymentMethodSelector value={paymentMethod} onChange={setPaymentMethod} />
                   </CardContent>
                 </Card>
               </div>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ShoppingCart, Phone, Sun, Moon } from 'lucide-react';
+import { Menu, X, ShoppingCart, Phone, Sun, Moon, History } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { useTheme } from '@/context/ThemeContext';
@@ -17,6 +17,7 @@ const Header = () => {
   const navLinks = [
     { path: '/', label: 'Home' },
     { path: '/menu', label: 'Menu' },
+    { path: '/orders', label: 'Orders' },
     { path: '/cart', label: 'Cart' },
   ];
 

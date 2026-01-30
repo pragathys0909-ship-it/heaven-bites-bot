@@ -2,104 +2,106 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    --background: 30 20% 98%;
-    --foreground: 20 25% 15%;
+    --background: 45 30% 97%;
+    --foreground: 220 25% 12%;
 
-    --card: 30 30% 96%;
-    --card-foreground: 20 25% 15%;
+    --card: 45 40% 95%;
+    --card-foreground: 220 25% 12%;
 
-    --popover: 30 30% 98%;
-    --popover-foreground: 20 25% 15%;
+    --popover: 45 40% 98%;
+    --popover-foreground: 220 25% 12%;
 
-    --primary: 350 65% 35%;
-    --primary-foreground: 30 30% 98%;
+    --primary: 160 60% 35%;
+    --primary-foreground: 45 40% 98%;
 
-    --secondary: 38 70% 50%;
-    --secondary-foreground: 20 25% 10%;
+    --secondary: 25 95% 55%;
+    --secondary-foreground: 45 40% 98%;
 
-    --muted: 30 15% 90%;
-    --muted-foreground: 20 10% 45%;
+    --muted: 45 20% 90%;
+    --muted-foreground: 220 15% 40%;
 
-    --accent: 38 70% 50%;
-    --accent-foreground: 20 25% 10%;
+    --accent: 340 75% 55%;
+    --accent-foreground: 45 40% 98%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 30 20% 85%;
-    --input: 30 20% 85%;
-    --ring: 350 65% 35%;
+    --border: 45 25% 85%;
+    --input: 45 25% 85%;
+    --ring: 160 60% 35%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    --gold: 38 70% 50%;
-    --gold-light: 40 75% 65%;
-    --burgundy: 350 65% 35%;
-    --burgundy-dark: 350 70% 25%;
-    --cream: 30 30% 96%;
-    --spice: 25 80% 45%;
+    --emerald: 160 60% 35%;
+    --emerald-light: 160 55% 50%;
+    --coral: 25 95% 55%;
+    --coral-light: 25 90% 65%;
+    --rose: 340 75% 55%;
+    --cream: 45 40% 95%;
+    --saffron: 38 90% 55%;
 
-    --font-display: 'Playfair Display', serif;
-    --font-body: 'Poppins', sans-serif;
+    --font-display: 'Cormorant Garamond', serif;
+    --font-body: 'DM Sans', sans-serif;
 
-    --sidebar-background: 30 20% 98%;
-    --sidebar-foreground: 20 25% 25%;
-    --sidebar-primary: 350 65% 35%;
-    --sidebar-primary-foreground: 30 30% 98%;
-    --sidebar-accent: 38 70% 50%;
-    --sidebar-accent-foreground: 20 25% 10%;
-    --sidebar-border: 30 20% 85%;
-    --sidebar-ring: 350 65% 35%;
+    --sidebar-background: 45 30% 97%;
+    --sidebar-foreground: 220 25% 20%;
+    --sidebar-primary: 160 60% 35%;
+    --sidebar-primary-foreground: 45 40% 98%;
+    --sidebar-accent: 25 95% 55%;
+    --sidebar-accent-foreground: 45 40% 98%;
+    --sidebar-border: 45 25% 85%;
+    --sidebar-ring: 160 60% 35%;
   }
 
   .dark {
-    --background: 20 25% 8%;
-    --foreground: 30 20% 95%;
+    --background: 220 25% 8%;
+    --foreground: 45 30% 95%;
 
-    --card: 20 25% 12%;
-    --card-foreground: 30 20% 95%;
+    --card: 220 25% 12%;
+    --card-foreground: 45 30% 95%;
 
-    --popover: 20 25% 10%;
-    --popover-foreground: 30 20% 95%;
+    --popover: 220 25% 10%;
+    --popover-foreground: 45 30% 95%;
 
-    --primary: 38 70% 55%;
-    --primary-foreground: 20 25% 8%;
+    --primary: 160 55% 50%;
+    --primary-foreground: 220 25% 8%;
 
-    --secondary: 350 50% 45%;
-    --secondary-foreground: 30 20% 95%;
+    --secondary: 25 90% 60%;
+    --secondary-foreground: 220 25% 8%;
 
-    --muted: 20 20% 18%;
-    --muted-foreground: 30 15% 60%;
+    --muted: 220 20% 18%;
+    --muted-foreground: 45 20% 60%;
 
-    --accent: 38 70% 55%;
-    --accent-foreground: 20 25% 8%;
+    --accent: 340 70% 60%;
+    --accent-foreground: 220 25% 8%;
 
     --destructive: 0 65% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 20 20% 20%;
-    --input: 20 20% 20%;
-    --ring: 38 70% 55%;
+    --border: 220 20% 20%;
+    --input: 220 20% 20%;
+    --ring: 160 55% 50%;
 
-    --gold: 38 70% 55%;
-    --gold-light: 40 75% 65%;
-    --burgundy: 350 50% 45%;
-    --burgundy-dark: 350 55% 35%;
-    --cream: 20 25% 12%;
-    --spice: 25 75% 55%;
+    --emerald: 160 55% 50%;
+    --emerald-light: 160 50% 60%;
+    --coral: 25 90% 60%;
+    --coral-light: 25 85% 70%;
+    --rose: 340 70% 60%;
+    --cream: 220 25% 12%;
+    --saffron: 38 85% 60%;
 
-    --sidebar-background: 20 25% 10%;
-    --sidebar-foreground: 30 20% 90%;
-    --sidebar-primary: 38 70% 55%;
-    --sidebar-primary-foreground: 20 25% 8%;
-    --sidebar-accent: 350 50% 45%;
-    --sidebar-accent-foreground: 30 20% 95%;
-    --sidebar-border: 20 20% 20%;
-    --sidebar-ring: 38 70% 55%;
+    --sidebar-background: 220 25% 10%;
+    --sidebar-foreground: 45 30% 90%;
+    --sidebar-primary: 160 55% 50%;
+    --sidebar-primary-foreground: 220 25% 8%;
+    --sidebar-accent: 25 90% 60%;
+    --sidebar-accent-foreground: 220 25% 8%;
+    --sidebar-border: 220 20% 20%;
+    --sidebar-ring: 160 55% 50%;
   }
 }
 
@@ -115,6 +117,7 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
+    font-weight: 600;
   }
 }
 
@@ -127,16 +130,43 @@
     font-family: var(--font-body);
   }
 
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--emerald)) 0%, hsl(var(--emerald-light)) 100%);
+  }
+
+  .gradient-coral {
+    background: linear-gradient(135deg, hsl(var(--coral)) 0%, hsl(var(--coral-light)) 100%);
+  }
+
+  .gradient-rose {
+    background: linear-gradient(135deg, hsl(var(--rose)) 0%, hsl(var(--accent)) 100%);
+  }
+
+  .text-gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--emerald)) 0%, hsl(var(--emerald-light)) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-coral {
+    background: linear-gradient(135deg, hsl(var(--coral)) 0%, hsl(var(--saffron)) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Legacy support */
   .gradient-gold {
-    background: linear-gradient(135deg, hsl(var(--gold)) 0%, hsl(var(--gold-light)) 100%);
+    background: linear-gradient(135deg, hsl(var(--coral)) 0%, hsl(var(--saffron)) 100%);
   }
 
   .gradient-burgundy {
-    background: linear-gradient(135deg, hsl(var(--burgundy)) 0%, hsl(var(--burgundy-dark)) 100%);
+    background: linear-gradient(135deg, hsl(var(--emerald)) 0%, hsl(var(--emerald-light)) 100%);
   }
 
   .text-gradient-gold {
-    background: linear-gradient(135deg, hsl(var(--gold)) 0%, hsl(var(--gold-light)) 100%);
+    background: linear-gradient(135deg, hsl(var(--coral)) 0%, hsl(var(--saffron)) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

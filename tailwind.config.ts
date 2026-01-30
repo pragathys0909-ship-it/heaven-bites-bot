@@ -57,12 +57,19 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        gold: "hsl(var(--gold))",
-        "gold-light": "hsl(var(--gold-light))",
-        burgundy: "hsl(var(--burgundy))",
-        "burgundy-dark": "hsl(var(--burgundy-dark))",
+        emerald: "hsl(var(--emerald))",
+        "emerald-light": "hsl(var(--emerald-light))",
+        coral: "hsl(var(--coral))",
+        "coral-light": "hsl(var(--coral-light))",
+        rose: "hsl(var(--rose))",
         cream: "hsl(var(--cream))",
-        spice: "hsl(var(--spice))",
+        saffron: "hsl(var(--saffron))",
+        // Legacy aliases
+        gold: "hsl(var(--coral))",
+        "gold-light": "hsl(var(--coral-light))",
+        burgundy: "hsl(var(--emerald))",
+        "burgundy-dark": "hsl(var(--emerald-light))",
+        spice: "hsl(var(--coral))",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -70,8 +77,8 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        display: ['Playfair Display', 'serif'],
-        body: ['Poppins', 'sans-serif'],
+        display: ['Cormorant Garamond', 'serif'],
+        body: ['DM Sans', 'sans-serif'],
       },
       keyframes: {
         "accordion-down": {
@@ -87,8 +94,8 @@ export default {
           "50%": { transform: "translateY(-10px)" },
         },
         "pulse-glow": {
-          "0%, 100%": { boxShadow: "0 0 20px hsl(var(--gold) / 0.3)" },
-          "50%": { boxShadow: "0 0 40px hsl(var(--gold) / 0.6)" },
+          "0%, 100%": { boxShadow: "0 0 20px hsl(var(--emerald) / 0.3)" },
+          "50%": { boxShadow: "0 0 40px hsl(var(--emerald) / 0.6)" },
         },
       },
       animation: {

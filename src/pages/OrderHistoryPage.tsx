@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import Header from '@/components/Header';
 import Chatbot from '@/components/Chatbot';
+import AnimatedBackground from '@/components/AnimatedBackground';
 import { useOrders } from '@/context/OrderContext';
 
 const OrderHistoryPage = () => {
@@ -35,6 +36,7 @@ const OrderHistoryPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <AnimatedBackground variant="orders" />
       <Header />
       
       <main className="pt-20 md:pt-24 pb-16">

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Header from '@/components/Header';
 import Chatbot from '@/components/Chatbot';
+import AnimatedBackground from '@/components/AnimatedBackground';
 import heroRestaurant from '@/assets/hero-restaurant.jpg';
 import northIndianFood from '@/assets/north-indian-food.jpg';
 import southIndianFood from '@/assets/south-indian-food.jpg';
@@ -19,6 +20,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <AnimatedBackground variant="home" />
       <Header />
       
       {/* Hero Section with Image */}

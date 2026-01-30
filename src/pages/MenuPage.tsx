@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Header from '@/components/Header';
 import Chatbot from '@/components/Chatbot';
+import AnimatedBackground from '@/components/AnimatedBackground';
 import MenuItemCard from '@/components/MenuItemCard';
 import { northIndianMenu, southIndianMenu } from '@/data/menuData';
 
@@ -15,6 +16,7 @@ const MenuPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <AnimatedBackground variant="menu" />
       <Header />
       
       <main className="pt-20 md:pt-24 pb-16">

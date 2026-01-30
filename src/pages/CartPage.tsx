@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import Header from '@/components/Header';
 import Chatbot from '@/components/Chatbot';
+import AnimatedBackground from '@/components/AnimatedBackground';
 import PaymentMethodSelector from '@/components/PaymentMethodSelector';
 import { useCart, CartItem } from '@/context/CartContext';
 import { useOrders } from '@/context/OrderContext';
@@ -77,6 +78,7 @@ const CartPage = () => {
   if (orderPlaced) {
     return (
       <div className="min-h-screen bg-background">
+        <AnimatedBackground variant="cart" />
         <Header />
         
         <main className="pt-20 md:pt-24 pb-16">
@@ -172,6 +174,7 @@ const CartPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <AnimatedBackground variant="cart" />
       <Header />
       
       <main className="pt-20 md:pt-24 pb-16">

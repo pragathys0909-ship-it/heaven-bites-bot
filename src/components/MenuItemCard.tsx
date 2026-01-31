@@ -83,11 +83,11 @@ const MenuItemCard = ({ item, cuisineId }: MenuItemCardProps) => {
                 )}
               </div>
               
-              <h3 className="font-display font-semibold text-foreground leading-tight pr-2">
+              <h3 className="font-display font-bold text-lg md:text-xl text-foreground leading-tight pr-2">
                 {item.name}
               </h3>
               
-              <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
+              <p className="text-base text-muted-foreground line-clamp-2 mt-1.5">
                 {item.description}
               </p>
               
@@ -118,7 +118,7 @@ const MenuItemCard = ({ item, cuisineId }: MenuItemCardProps) => {
             </div>
             
             <div className="flex flex-col items-end gap-2 shrink-0">
-              <span className="font-display font-bold text-lg text-primary">
+              <span className="font-display font-bold text-xl md:text-2xl text-primary">
                 ₹{item.price}
               </span>
               

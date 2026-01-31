@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Minus, Plus, Trash2, ArrowLeft, ShoppingBag, Clock, CheckCircle2, Package } from 'lucide-react';
+import { Minus, Plus, Trash2, ArrowLeft, ShoppingBag, Clock, CheckCircle2, Package, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -9,8 +9,11 @@ import Header from '@/components/Header';
 import Chatbot from '@/components/Chatbot';
 import AnimatedBackground from '@/components/AnimatedBackground';
 import PaymentMethodSelector from '@/components/PaymentMethodSelector';
+import CustomerDetailsForm, { CustomerDetails } from '@/components/CustomerDetailsForm';
+import PaymentDetailsForm, { PaymentDetails, UpiDetails, CardDetails, WalletDetails } from '@/components/PaymentDetailsForm';
 import { useCart, CartItem } from '@/context/CartContext';
 import { useOrders } from '@/context/OrderContext';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 interface OrderDetails {
@@ -36,6 +39,18 @@ const CartPage = () => {
   const { addOrder } = useOrders();
   const [paymentMethod, setPaymentMethod] = useState('upi');
   const [orderPlaced, setOrderPlaced] = useState<OrderDetails | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const [customerDetails, setCustomerDetails] = useState<CustomerDetails>({
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+  });
+  const [customerErrors, setCustomerErrors] = useState<Partial<Record<keyof CustomerDetails, string>>>({});
+  
+  const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>(null);
+  const [paymentErrors, setPaymentErrors] = useState<Record<string, string>>({});
 
   const getEstimatedDelivery = () => {
     const now = new Date();
@@ -44,34 +59,142 @@ const CartPage = () => {
     return `${minTime.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })} - ${maxTime.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}`;
   };
 
-  const handleCheckout = () => {
+  const validateCustomerDetails = (): boolean => {
+    const errors: Partial<Record<keyof CustomerDetails, string>> = {};
+    
+    if (!customerDetails.name.trim()) {
+      errors.name = 'Name is required';
+    }
+    if (!customerDetails.email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerDetails.email)) {
+      errors.email = 'Invalid email address';
+    }
+    if (!customerDetails.phone.trim()) {
+      errors.phone = 'Phone number is required';
+    } else if (!/^[\d\s+\-()]{10,}$/.test(customerDetails.phone.replace(/\s/g, ''))) {
+      errors.phone = 'Invalid phone number';
+    }
+    if (!customerDetails.address.trim()) {
+      errors.address = 'Delivery address is required';
+    } else if (customerDetails.address.trim().length < 10) {
+      errors.address = 'Please enter a complete address';
+    }
+    
+    setCustomerErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const validatePaymentDetails = (): boolean => {
+    const errors: Record<string, string> = {};
+    
+    if (paymentMethod === 'upi') {
+      const details = paymentDetails as UpiDetails | null;
+      if (!details?.upiId?.trim()) {
+        errors.upiId = 'UPI ID is required';
+      } else if (!/^[\w.-]+@[\w]+$/.test(details.upiId)) {
+        errors.upiId = 'Invalid UPI ID format';
+      }
+    } else if (paymentMethod === 'card') {
+      const details = paymentDetails as CardDetails | null;
+      if (!details?.cardNumber?.replace(/\s/g, '')) {
+        errors.cardNumber = 'Card number is required';
+      } else if (details.cardNumber.replace(/\s/g, '').length < 16) {
+        errors.cardNumber = 'Invalid card number';
+      }
+      if (!details?.cardName?.trim()) {
+        errors.cardName = 'Cardholder name is required';
+      }
+      if (!details?.expiry?.trim()) {
+        errors.expiry = 'Expiry date is required';
+      } else if (!/^\d{2}\/\d{2}$/.test(details.expiry)) {
+        errors.expiry = 'Invalid format (MM/YY)';
+      }
+      if (!details?.cvv?.trim()) {
+        errors.cvv = 'CVV is required';
+      } else if (details.cvv.length < 3) {
+        errors.cvv = 'Invalid CVV';
+      }
+    } else if (paymentMethod === 'wallet') {
+      const details = paymentDetails as WalletDetails | null;
+      if (!details?.phone?.trim()) {
+        errors.phone = 'Phone number is required';
+      }
+    }
+    
+    setPaymentErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleCheckout = async () => {
+    // Validate all forms
+    const isCustomerValid = validateCustomerDetails();
+    const isPaymentValid = validatePaymentDetails();
+    
+    if (!isCustomerValid || !isPaymentValid) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
     const finalAmount = totalAmount < 300 ? totalAmount + 30 : totalAmount;
+    const deliveryFee = totalAmount < 300 ? 30 : 0;
     const estimatedDelivery = getEstimatedDelivery();
     const paymentMethodName = getPaymentMethodName(paymentMethod);
+    const orderNumber = `HH${Date.now().toString(36).toUpperCase()}`;
     
-    // Save to order history
-    const newOrder = addOrder({
-      items: [...items],
-      amount: finalAmount,
-      status: 'success',
-      paymentMethod: paymentMethodName,
-      estimatedDelivery,
-    });
-    
-    const order: OrderDetails = {
-      items: [...items],
-      total: finalAmount,
-      paymentMethod: paymentMethodName,
-      estimatedDelivery,
-      orderId: newOrder.id,
-    };
-    
-    setOrderPlaced(order);
-    clearCart();
-    
-    toast.success('Order placed successfully! 🎉', {
-      description: `Order ID: ${order.orderId}`,
-    });
+    try {
+      // Save to database
+      const { data, error } = await supabase.from('orders').insert([{
+        order_number: orderNumber,
+        customer_name: customerDetails.name.trim(),
+        customer_email: customerDetails.email.trim(),
+        customer_phone: customerDetails.phone.trim(),
+        delivery_address: customerDetails.address.trim(),
+        items: items as any,
+        subtotal: totalAmount,
+        delivery_fee: deliveryFee,
+        total_amount: finalAmount,
+        payment_method: paymentMethodName,
+        payment_details: paymentMethod !== 'cod' ? paymentDetails as any : null,
+        estimated_delivery: estimatedDelivery,
+        status: 'success',
+      }]).select().single();
+      
+      if (error) throw error;
+      
+      // Also save to local order history
+      addOrder({
+        items: [...items],
+        amount: finalAmount,
+        status: 'success',
+        paymentMethod: paymentMethodName,
+        estimatedDelivery,
+      });
+      
+      const order: OrderDetails = {
+        items: [...items],
+        total: finalAmount,
+        paymentMethod: paymentMethodName,
+        estimatedDelivery,
+        orderId: orderNumber,
+      };
+      
+      setOrderPlaced(order);
+      clearCart();
+      
+      toast.success('Order placed successfully! 🎉', {
+        description: `Order ID: ${order.orderId}`,
+      });
+    } catch (error: any) {
+      console.error('Order submission error:', error);
+      toast.error('Failed to place order', {
+        description: error.message || 'Please try again',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Order Confirmation View
@@ -203,7 +326,7 @@ const CartPage = () => {
             </motion.div>
           ) : (
             <div className="grid lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2 space-y-4">
+              <div className="lg:col-span-2 space-y-6">
                 {/* Cart Items */}
                 <AnimatePresence>
                   {items.map((item) => (
@@ -261,11 +384,23 @@ const CartPage = () => {
                   ))}
                 </AnimatePresence>
 
+                {/* Customer Details Form */}
+                <CustomerDetailsForm 
+                  details={customerDetails} 
+                  onChange={setCustomerDetails}
+                  errors={customerErrors}
+                />
+
                 {/* Payment Methods */}
-                <Card className="mt-6">
+                <Card>
                   <CardContent className="p-6">
-                    <h2 className="font-display text-lg font-bold mb-4">Select Payment Method</h2>
+                    <h2 className="font-display text-xl font-bold mb-4">Select Payment Method</h2>
                     <PaymentMethodSelector value={paymentMethod} onChange={setPaymentMethod} />
+                    <PaymentDetailsForm 
+                      paymentMethod={paymentMethod} 
+                      onDetailsChange={setPaymentDetails}
+                      errors={paymentErrors}
+                    />
                   </CardContent>
                 </Card>
               </div>
@@ -314,8 +449,16 @@ const CartPage = () => {
                   <Button 
                     className="w-full gradient-burgundy text-lg h-12" 
                     onClick={handleCheckout}
+                    disabled={isSubmitting}
                   >
-                    Place Order
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      'Place Order'
+                    )}
                   </Button>
                   
                   <p className="text-xs text-center text-muted-foreground mt-3">

@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import MenuPage from "./pages/MenuPage";
 import CartPage from "./pages/CartPage";
 import OrderHistoryPage from "./pages/OrderHistoryPage";
+import OrderTrackingPage from "./pages/OrderTrackingPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
                 <Route path="/menu" element={<MenuPage />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/orders" element={<OrderHistoryPage />} />
+                <Route path="/track" element={<OrderTrackingPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>

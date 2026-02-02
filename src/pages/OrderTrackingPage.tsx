@@ -75,7 +75,7 @@ const OrderTrackingPage = () => {
         .from('orders')
         .select('*')
         .eq('order_number', orderNumber.trim().toUpperCase())
-        .single();
+        .maybeSingle();
 
       if (error || !data) {
         setOrder(null);

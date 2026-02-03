@@ -6,9 +6,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import Header from '@/components/Header';
 import Chatbot from '@/components/Chatbot';
 import AnimatedBackground from '@/components/AnimatedBackground';
-import heroRestaurant from '@/assets/hero-restaurant.jpg';
+import HeroCarousel from '@/components/HeroCarousel';
 import northIndianFood from '@/assets/north-indian-food.jpg';
 import southIndianFood from '@/assets/south-indian-food.jpg';
+import heroRestaurant from '@/assets/hero-restaurant.jpg';
 
 const Index = () => {
   const features = [
@@ -23,33 +24,16 @@ const Index = () => {
       <AnimatedBackground variant="home" />
       <Header />
       
-      {/* Hero Section with Image */}
-      <section className="relative pt-16 md:pt-20 overflow-hidden">
-        <div className="absolute inset-0">
-          <img 
-            src={heroRestaurant} 
-            alt="Hotel Heaven Restaurant" 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/60" />
-        </div>
-        <div className="container mx-auto px-4 py-20 md:py-32 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-2xl"
-          >
-            <h1 className="font-display text-4xl md:text-6xl font-bold text-foreground mb-6">
-              Welcome to{' '}
-              <span className="text-gradient-gold">Hotel Heaven</span>
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8">
-              Experience the finest North & South Indian cuisine. Order online or chat with our AI assistant for personalized recommendations.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+      {/* Hero Carousel Section */}
+      <section className="relative pt-16 md:pt-20">
+        <HeroCarousel />
+        
+        {/* CTA Buttons overlay */}
+        <div className="absolute bottom-20 left-0 right-0 z-20">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col sm:flex-row gap-4 max-w-md">
               <Link to="/menu">
-                <Button size="lg" className="gradient-burgundy text-lg px-8">
+                <Button size="lg" className="gradient-burgundy text-lg px-8 w-full sm:w-auto">
                   View Menu <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
@@ -57,7 +41,7 @@ const Index = () => {
                 Call: +91 98765 43210
               </Button>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 

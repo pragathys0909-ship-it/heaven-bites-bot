@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { MenuItem } from '@/data/menuData';
 import { useCart } from '@/context/CartContext';
 import { toast } from 'sonner';
+import { getFoodImage } from '@/data/foodImages';
 
 interface MenuItemCardProps {
   item: MenuItem;
@@ -14,6 +15,7 @@ interface MenuItemCardProps {
 
 const MenuItemCard = ({ item, cuisineId }: MenuItemCardProps) => {
   const { addItem } = useCart();
+  const foodImage = getFoodImage(item.id);
 
   const handleAddToCart = () => {
     addItem({ ...item, cuisineId });
@@ -54,6 +56,18 @@ const MenuItemCard = ({ item, cuisineId }: MenuItemCardProps) => {
               <ChefHat className="w-3 h-3" />
               Chef's Special
             </div>
+          </div>
+        )}
+
+        {/* Food Image */}
+        {foodImage && (
+          <div className="relative h-36 md:h-40 overflow-hidden">
+            <img
+              src={foodImage}
+              alt={item.name}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
           </div>
         )}
 

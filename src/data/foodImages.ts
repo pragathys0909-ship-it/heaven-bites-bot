@@ -37,16 +37,19 @@ import kesariBath from '@/assets/food/kesari-bath.jpg';
 import chettinadChicken from '@/assets/food/chettinad-chicken.jpg';
 import kheer from '@/assets/food/kheer.jpg';
 import alooTikki from '@/assets/food/aloo-tikki.jpg';
+import paneerParatha from '@/assets/food/paneer-paratha.jpg';
+import bedmiAloo from '@/assets/food/bedmi-aloo.jpg';
+import lassi from '@/assets/food/lassi.jpg';
 
 // Map of item IDs to their images
 export const foodImages: Record<string, string> = {
   // North Indian Breakfast
   'nb1': alooParatha,
   'nb2': choleBhature,
-  'nb3': alooParatha, // Paneer paratha similar
+  'nb3': paneerParatha,
   'nb4': pooriSabzi,
-  'nb5': choleBhature, // Bedmi aloo similar
-  'nb6': mangoLassi,
+  'nb5': bedmiAloo,
+  'nb6': lassi,
 
   // North Indian Lunch
   'nl1': dalMakhani,

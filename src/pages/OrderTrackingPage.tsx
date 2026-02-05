@@ -12,7 +12,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import Header from '@/components/Header';
 import Chatbot from '@/components/Chatbot';
 import AnimatedBackground from '@/components/AnimatedBackground';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 interface OrderDetails {
@@ -71,13 +70,24 @@ const OrderTrackingPage = () => {
     setSearched(true);
 
     try {
-      const { data, error } = await supabase
-        .from('orders')
-        .select('*')
-        .eq('order_number', orderNumber.trim().toUpperCase())
-        .maybeSingle();
+      // Use secure edge function instead of direct database access
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/track-order`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+          },
+          body: JSON.stringify({
+            order_number: orderNumber.trim().toUpperCase(),
+          }),
+        }
+      );
+      
+      const result = await response.json();
 
-      if (error || !data) {
+      if (!response.ok || !result.success) {
         setOrder(null);
         toast({
           title: 'Order Not Found',
@@ -85,6 +95,7 @@ const OrderTrackingPage = () => {
           variant: 'destructive',
         });
       } else {
+        const data = result.order;
         const items = Array.isArray(data.items) ? data.items : [];
         setOrder({
           ...data,
@@ -95,7 +106,7 @@ const OrderTrackingPage = () => {
       console.error('Error fetching order:', error);
       toast({
         title: 'Error',
-        description: 'Failed to fetch order details. Please try again.',
+        description: error instanceof Error ? error.message : 'Failed to fetch order details. Please try again.',
         variant: 'destructive',
       });
     } finally {

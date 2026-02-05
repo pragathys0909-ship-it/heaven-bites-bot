@@ -13,7 +13,6 @@ import CustomerDetailsForm, { CustomerDetails } from '@/components/CustomerDetai
 import PaymentDetailsForm, { PaymentDetails, UpiDetails, CardDetails, WalletDetails } from '@/components/PaymentDetailsForm';
 import { useCart, CartItem } from '@/context/CartContext';
 import { useOrders } from '@/context/OrderContext';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 interface OrderDetails {
@@ -51,6 +50,9 @@ const CartPage = () => {
   
   const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>(null);
   const [paymentErrors, setPaymentErrors] = useState<Record<string, string>>({});
+  
+  // Honeypot field for bot detection
+  const [honeypot, setHoneypot] = useState('');
 
   const getEstimatedDelivery = () => {
     const now = new Date();
@@ -140,29 +142,43 @@ const CartPage = () => {
     
     const finalAmount = totalAmount < 300 ? totalAmount + 30 : totalAmount;
     const deliveryFee = totalAmount < 300 ? 30 : 0;
-    const estimatedDelivery = getEstimatedDelivery();
     const paymentMethodName = getPaymentMethodName(paymentMethod);
-    const orderNumber = `HH${Date.now().toString(36).toUpperCase()}`;
     
     try {
-      // Save to database
-      const { data, error } = await supabase.from('orders').insert([{
-        order_number: orderNumber,
-        customer_name: customerDetails.name.trim(),
-        customer_email: customerDetails.email.trim(),
-        customer_phone: customerDetails.phone.trim(),
-        delivery_address: customerDetails.address.trim(),
-        items: items as any,
-        subtotal: totalAmount,
-        delivery_fee: deliveryFee,
-        total_amount: finalAmount,
-        payment_method: paymentMethodName,
-        payment_details: paymentMethod !== 'cod' ? paymentDetails as any : null,
-        estimated_delivery: estimatedDelivery,
-        status: 'success',
-      }]).select().single();
+      // Use secure edge function instead of direct database access
+      // SECURITY: Payment details are validated client-side but NEVER sent to server
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-order`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+          },
+          body: JSON.stringify({
+            customer_name: customerDetails.name.trim(),
+            customer_email: customerDetails.email.trim(),
+            customer_phone: customerDetails.phone.trim(),
+            delivery_address: customerDetails.address.trim(),
+            items: items.map(item => ({
+              id: item.id,
+              name: item.name,
+              price: item.price,
+              quantity: item.quantity,
+              isVeg: item.isVeg,
+            })),
+            subtotal: totalAmount,
+            payment_method: paymentMethodName,
+            honeypot, // Bot detection field
+          }),
+        }
+      );
       
-      if (error) throw error;
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to place order');
+      }
       
       // Also save to local order history
       addOrder({
@@ -170,15 +186,15 @@ const CartPage = () => {
         amount: finalAmount,
         status: 'success',
         paymentMethod: paymentMethodName,
-        estimatedDelivery,
+        estimatedDelivery: result.estimated_delivery || getEstimatedDelivery(),
       });
       
       const order: OrderDetails = {
         items: [...items],
         total: finalAmount,
         paymentMethod: paymentMethodName,
-        estimatedDelivery,
-        orderId: orderNumber,
+        estimatedDelivery: result.estimated_delivery || getEstimatedDelivery(),
+        orderId: result.order_number,
       };
       
       setOrderPlaced(order);
@@ -389,6 +405,18 @@ const CartPage = () => {
                   details={customerDetails} 
                   onChange={setCustomerDetails}
                   errors={customerErrors}
+                />
+                
+                {/* Honeypot field for bot detection - hidden from users */}
+                <input
+                  type="text"
+                  name="website"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  style={{ position: 'absolute', left: '-9999px', opacity: 0 }}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
                 />
 
                 {/* Payment Methods */}

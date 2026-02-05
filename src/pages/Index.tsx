@@ -176,7 +176,7 @@ const Index = () => {
               className="rounded-2xl overflow-hidden shadow-lg h-64 md:h-96"
             >
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.5731898991844!2d77.5945627!3d12.9715987!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1670c9b44e6d%3A0xf8dfc3e8517e4fe0!2sBengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1699999999999!5m2!1sen!2sin"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31097.87654321!2d79.2833!3d12.7833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a4d50c6f7e9f3b7%3A0x2d1c4f8b9e7a6c5d!2sArcot%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1699999999999!5m2!1sen!2sin"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -201,8 +201,9 @@ const Index = () => {
                     <div>
                       <h3 className="font-display font-semibold text-lg text-foreground mb-1">Our Address</h3>
                       <p className="text-muted-foreground">
-                        123 MG Road, Brigade Gateway<br />
-                        Bengaluru, Karnataka 560001<br />
+                        15 Main Road, Near Bus Stand<br />
+                        Arcot, Ranipet District<br />
+                        Tamil Nadu 632503<br />
                         India
                       </p>
                     </div>

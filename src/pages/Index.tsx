@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Utensils, Clock, Star, MapPin } from 'lucide-react';
+import { ArrowRight, Utensils, Clock, Star, MapPin, Phone, Mail, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import Header from '@/components/Header';
 import Chatbot from '@/components/Chatbot';
 import AnimatedBackground from '@/components/AnimatedBackground';
@@ -154,6 +156,176 @@ const Index = () => {
               </div>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Location Section */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-center mb-4">
+            Find <span className="text-gradient-gold">Us</span>
+          </h2>
+          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
+            Visit our restaurant or order online for delivery
+          </p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="rounded-2xl overflow-hidden shadow-lg h-64 md:h-96"
+            >
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.5731898991844!2d77.5945627!3d12.9715987!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1670c9b44e6d%3A0xf8dfc3e8517e4fe0!2sBengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1699999999999!5m2!1sen!2sin"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Hotel Heaven Location"
+              />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="flex flex-col justify-center"
+            >
+              <Card className="p-6 border-border/50">
+                <CardContent className="p-0 space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full gradient-burgundy flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-primary-foreground" />
+                    </div>
+                    <div>
+                      <h3 className="font-display font-semibold text-lg text-foreground mb-1">Our Address</h3>
+                      <p className="text-muted-foreground">
+                        123 MG Road, Brigade Gateway<br />
+                        Bengaluru, Karnataka 560001<br />
+                        India
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full gradient-gold flex items-center justify-center flex-shrink-0">
+                      <Clock className="w-6 h-6 text-secondary-foreground" />
+                    </div>
+                    <div>
+                      <h3 className="font-display font-semibold text-lg text-foreground mb-1">Opening Hours</h3>
+                      <p className="text-muted-foreground">
+                        Monday - Friday: 11:00 AM - 11:00 PM<br />
+                        Saturday - Sunday: 10:00 AM - 12:00 AM
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full gradient-burgundy flex items-center justify-center flex-shrink-0">
+                      <Phone className="w-6 h-6 text-primary-foreground" />
+                    </div>
+                    <div>
+                      <h3 className="font-display font-semibold text-lg text-foreground mb-1">Call Us</h3>
+                      <p className="text-muted-foreground">
+                        +91 98765 43210<br />
+                        +91 80 4567 8900
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Us Section */}
+      <section className="py-16 bg-card">
+        <div className="container mx-auto px-4">
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-center mb-4">
+            Contact <span className="text-gradient-gold">Us</span>
+          </h2>
+          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
+            Have questions or feedback? We'd love to hear from you!
+          </p>
+          <div className="max-w-2xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <Card className="p-6 md:p-8 border-border/50">
+                <CardContent className="p-0">
+                  <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label htmlFor="name" className="text-sm font-medium text-foreground">
+                          Your Name
+                        </label>
+                        <Input 
+                          id="name" 
+                          placeholder="John Doe" 
+                          className="bg-background"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="email" className="text-sm font-medium text-foreground">
+                          Email Address
+                        </label>
+                        <Input 
+                          id="email" 
+                          type="email" 
+                          placeholder="john@example.com" 
+                          className="bg-background"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="phone" className="text-sm font-medium text-foreground">
+                        Phone Number
+                      </label>
+                      <Input 
+                        id="phone" 
+                        type="tel" 
+                        placeholder="+91 98765 43210" 
+                        className="bg-background"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="message" className="text-sm font-medium text-foreground">
+                        Your Message
+                      </label>
+                      <Textarea 
+                        id="message" 
+                        placeholder="Tell us what's on your mind..." 
+                        rows={5}
+                        className="bg-background resize-none"
+                      />
+                    </div>
+                    <Button type="submit" className="w-full gradient-burgundy text-lg">
+                      <Send className="w-5 h-5 mr-2" />
+                      Send Message
+                    </Button>
+                  </form>
+                  <div className="mt-8 pt-6 border-t border-border flex flex-wrap gap-6 justify-center">
+                    <a 
+                      href="mailto:info@hotelheaven.com" 
+                      className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <Mail className="w-5 h-5" />
+                      info@hotelheaven.com
+                    </a>
+                    <a 
+                      href="tel:+919876543210" 
+                      className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <Phone className="w-5 h-5" />
+                      +91 98765 43210
+                    </a>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
         </div>
       </section>
 

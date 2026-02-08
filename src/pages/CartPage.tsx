@@ -292,21 +292,25 @@ const CartPage = () => {
             </Card>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                className="flex-1 bg-[#25D366] hover:bg-[#1da851] text-white"
-                onClick={() => {
+              <a
+                href={(() => {
                   const itemsList = orderPlaced.items
                     .map(item => `• ${item.name} x${item.quantity} - ₹${item.price * item.quantity}`)
-                    .join('%0a');
-                  const message = `🎉 *Order Confirmed - Hotel Heaven* 🎉%0a%0a📋 *Order ID:* ${orderPlaced.orderId}%0a%0a🍽️ *Items:*%0a${itemsList}%0a%0a💰 *Total:* ₹${orderPlaced.total}%0a💳 *Payment:* ${orderPlaced.paymentMethod}%0a🕐 *Estimated Delivery:* ${orderPlaced.estimatedDelivery}%0a%0aThank you for ordering! 🙏`;
+                    .join('\n');
+                  const message = `🎉 *Order Confirmed - Hotel Heaven* 🎉\n\n📋 *Order ID:* ${orderPlaced.orderId}\n\n🍽️ *Items:*\n${itemsList}\n\n💰 *Total:* ₹${orderPlaced.total}\n💳 *Payment:* ${orderPlaced.paymentMethod}\n🕐 *Estimated Delivery:* ${orderPlaced.estimatedDelivery}\n\nThank you for ordering! 🙏`;
                   const phone = customerDetails.phone.replace(/[^0-9]/g, '');
-                  const whatsappUrl = `https://wa.me/${phone.startsWith('91') ? phone : '91' + phone}?text=${message}`;
-                  window.open(whatsappUrl, '_blank');
-                }}
+                  const formattedPhone = phone.startsWith('91') ? phone : '91' + phone;
+                  return `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`;
+                })()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1"
               >
-                <MessageCircle className="w-5 h-5 mr-2" />
-                Share on WhatsApp
-              </Button>
+                <Button className="w-full bg-[#25D366] hover:bg-[#1da851] text-white">
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  Share on WhatsApp
+                </Button>
+              </a>
               <Link to="/menu" className="flex-1">
                 <Button variant="outline" className="w-full">
                   Order More

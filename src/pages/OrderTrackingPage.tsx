@@ -51,16 +51,17 @@ const getStatusProgress = (status: string) => {
 
 const OrderTrackingPage = () => {
   const [orderNumber, setOrderNumber] = useState('');
+  const [customerEmail, setCustomerEmail] = useState('');
   const [order, setOrder] = useState<OrderDetails | null>(null);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const { toast } = useToast();
 
   const handleTrackOrder = async () => {
-    if (!orderNumber.trim()) {
+    if (!orderNumber.trim() || !customerEmail.trim()) {
       toast({
-        title: 'Enter Order Number',
-        description: 'Please enter your order number to track',
+        title: 'Missing Information',
+        description: 'Please enter both your order number and email address',
         variant: 'destructive',
       });
       return;
@@ -81,6 +82,7 @@ const OrderTrackingPage = () => {
           },
           body: JSON.stringify({
             order_number: orderNumber.trim().toUpperCase(),
+            customer_email: customerEmail.trim().toLowerCase(),
           }),
         }
       );
@@ -145,8 +147,8 @@ const OrderTrackingPage = () => {
           {/* Search Section */}
           <Card className="mb-8">
             <CardContent className="p-6">
-              <div className="flex flex-col sm:flex-row gap-4">
-                <div className="flex-1">
+              <div className="flex flex-col gap-4">
+                <div className="grid sm:grid-cols-2 gap-4">
                   <Input
                     placeholder="Enter your order number (e.g., HH12345ABC)"
                     value={orderNumber}
@@ -154,11 +156,19 @@ const OrderTrackingPage = () => {
                     onKeyDown={(e) => e.key === 'Enter' && handleTrackOrder()}
                     className="text-lg h-12"
                   />
+                  <Input
+                    type="email"
+                    placeholder="Enter your email address"
+                    value={customerEmail}
+                    onChange={(e) => setCustomerEmail(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleTrackOrder()}
+                    className="text-lg h-12"
+                  />
                 </div>
                 <Button 
                   onClick={handleTrackOrder} 
                   disabled={loading}
-                  className="gradient-burgundy h-12 px-8"
+                  className="gradient-burgundy h-12 px-8 w-full sm:w-auto sm:self-end"
                 >
                   <Search className="w-5 h-5 mr-2" />
                   Track Order

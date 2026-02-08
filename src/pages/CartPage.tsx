@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Minus, Plus, Trash2, ArrowLeft, ShoppingBag, Clock, CheckCircle2, Package, Loader2 } from 'lucide-react';
+import { Minus, Plus, Trash2, ArrowLeft, ShoppingBag, Clock, CheckCircle2, Package, Loader2, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -292,6 +292,21 @@ const CartPage = () => {
             </Card>
 
             <div className="flex flex-col sm:flex-row gap-4">
+              <Button
+                className="flex-1 bg-[#25D366] hover:bg-[#1da851] text-white"
+                onClick={() => {
+                  const itemsList = orderPlaced.items
+                    .map(item => `• ${item.name} x${item.quantity} - ₹${item.price * item.quantity}`)
+                    .join('%0a');
+                  const message = `🎉 *Order Confirmed - Hotel Heaven* 🎉%0a%0a📋 *Order ID:* ${orderPlaced.orderId}%0a%0a🍽️ *Items:*%0a${itemsList}%0a%0a💰 *Total:* ₹${orderPlaced.total}%0a💳 *Payment:* ${orderPlaced.paymentMethod}%0a🕐 *Estimated Delivery:* ${orderPlaced.estimatedDelivery}%0a%0aThank you for ordering! 🙏`;
+                  const phone = customerDetails.phone.replace(/[^0-9]/g, '');
+                  const whatsappUrl = `https://wa.me/${phone.startsWith('91') ? phone : '91' + phone}?text=${message}`;
+                  window.open(whatsappUrl, '_blank');
+                }}
+              >
+                <MessageCircle className="w-5 h-5 mr-2" />
+                Share on WhatsApp
+              </Button>
               <Link to="/menu" className="flex-1">
                 <Button variant="outline" className="w-full">
                   Order More
